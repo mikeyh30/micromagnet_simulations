@@ -7,4 +7,4 @@ image:
 	feh test1.out/*.png
 
 clean:
-	rm -r test1.mx3
+	rm -r test1.out
