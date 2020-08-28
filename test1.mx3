@@ -12,8 +12,6 @@ alpha = 0.1
 EdgeSmooth = 8
 
 // magnet definitions
-//top_island := universe().sub(universe())
-//bottom_island := universe().sub(universe())
 system := universe().sub(universe())
 
 rect1 := cuboid(400e-9,100e-9,cz)
@@ -24,12 +22,12 @@ system = system.add(top).add(bottom)
 setgeom(system)
 snapshot(geom)
 
-//m = uniform(1, .1, 0)
-//relax()
-//save(m)    // relaxed state
+m = uniform(1, .1, 0) // uniform field in (x,y,z)
+relax()    // slower but robust for large changes
+save(m)    // relaxed state
 
-//autosave(m, 200e-12)
-//tableautosave(10e-12)
+autosave(m, 200e-12) // saves space-dependent quantity m every 200e-12s
+tableautosave(10e-12) // save data table every 10e-12s
 
-//B_ext = vector(-24.6E-3, 4.3E-3, 0)
-//run(1e-9)
+B_ext = vector(-24.6E-3, 4.3E-3, 0) // Overwrite external magnetic
+run(1e-9) // run sim for 1e-9s
