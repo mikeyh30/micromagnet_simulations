@@ -1,8 +1,11 @@
 // Cell size
-c := 10e-9
+c := 100e-9
 cz := 25e-9
+width := 1.3e-6
+height := 5e-6
+gap := 6.85e-6
 
-SetGridsize(100,100,4)
+SetGridsize(128,256,4)
 SetCellsize(c,c,cz)
 
 // Permalloy parameters
@@ -14,13 +17,14 @@ EdgeSmooth = 8
 // magnet definitions
 system := universe().sub(universe())
 
-rect1 := cuboid(400e-9,100e-9,cz)
-top := rect1.transl(0,200e-9,0)
-bottom := rect1.transl(0,-200e-9,0)
+rect1 := cuboid(width,height,4*cz)
+top := rect1.transl(0,(height+gap)/2,0)
+bottom := rect1.transl(0,-(height+gap)/2,0)
 system = system.add(top).add(bottom)
 
 setgeom(system)
 snapshot(geom)
+saveas(geom,"v2.ovf")
 
 m = randomMag() // uniform field in (x,y,z)
 relax()    // slower but robust for large changes
