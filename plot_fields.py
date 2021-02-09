@@ -18,7 +18,7 @@ X, Y, Z = np.meshgrid(np.arange(0, xr, 1), np.arange(0, yr, 1), np.arange(zr))
 u, v, w = f[0, :, :, :], f[1, :, :, :], f[2, :, :, :]
 u, v, w = u.transpose(1, 2, 0), v.transpose(1, 2, 0), w.transpose(1, 2, 0)
 
-CNT_height = 15
+CNT_height = 14
 mag_B = np.hypot(u, v, w)
 
 cx = 5 #nm
@@ -46,7 +46,10 @@ axes1.set_title("Magnetostatic field (mT)")
 axes1.set_aspect('equal')
 axes1.streamplot(x,y,u[:, :, CNT_height],v[:, :, CNT_height])
 
-im2 = axes2.pcolor(x,y,V[:, :, CNT_height])
+
+
+dV = np.gradient(v[:, :, CNT_height],5,axis=0)
+im2 = axes2.pcolor(x,y,dV)
 axes2.axvline(x=slice1*5, color="r", label="axvline - full height")
 cbar = fig.colorbar(im2, ax=axes2)
 axes2.set_title("Magnetostatic field gradient (mT/nm)")
@@ -73,20 +76,24 @@ axes2.add_patch(rect6)
 axes3.legend()
 axes3.set_title("Magnetostatic field (mT)")
 
-region_size = np.max(np.maximum(u[:, slice1, CNT_height],v[:, slice1, CNT_height],w[:, slice1, CNT_height]))
 
+region_size = np.max(np.maximum(np.maximum(u[:, slice1, CNT_height],v[:, slice1, CNT_height]),w[:, slice1, CNT_height]))
 axes3.add_patch(patches.Rectangle(((384*5)/2 - electrode_position-100,-region_size),100,2*region_size,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2))
 axes3.add_patch(patches.Rectangle(((384*5)/2 + electrode_position,-region_size),100,2*region_size,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2))
 axes3.add_patch(patches.Rectangle(((384*5)/2 - 250,-region_size),500,2*region_size,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2))
 
+# want du/dy etc
+du = np.gradient(u[:, slice1, CNT_height],y)
+dv = np.gradient(v[:, slice1, CNT_height],y)
+dw = np.gradient(w[:, slice1, CNT_height],y)
 
-(l,) = axes4.plot(y,U[:, slice1, CNT_height], label="x")
-(l,) = axes4.plot(y,V[:, slice1, CNT_height], label="y")
-(l,) = axes4.plot(y,W[:, slice1, CNT_height], label="z")
+(l,) = axes4.plot(y,du, label="x")
+(l,) = axes4.plot(y,dv, label="y")
+(l,) = axes4.plot(y,dw, label="z")
 axes4.legend()
 axes4.set_title("Magnetostatic field gradient (mT/nm)")
 
-region_size = np.max(np.maximum(U[:, slice1, CNT_height],V[:, slice1, CNT_height],W[:, slice1, CNT_height]))
+region_size = np.max(np.maximum(np.maximum(U[:, slice1, CNT_height],V[:, slice1, CNT_height]),W[:, slice1, CNT_height]))
 
 axes4.add_patch(patches.Rectangle(((384*5)/2 - electrode_position-100,-region_size),100,2*region_size,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2))
 axes4.add_patch(patches.Rectangle(((384*5)/2 + electrode_position,-region_size),100,2*region_size,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2))
@@ -94,3 +101,15 @@ axes4.add_patch(patches.Rectangle(((384*5)/2 - 250,-region_size),500,2*region_si
 
 
 plt.show()
+
+# fig = plt.figure()
+# ax = fig.gca(projection='3d')
+
+# ax.quiver(  X[::32,::5,::4],
+#             Y[::32,::5,::4],
+#             Z[::32,::5,::4],
+#             u[::32,::5,::4],
+#             v[::32,::5,::4],
+#             w[::32,::5,::4],
+#             normalize=True)
+# plt.show()
