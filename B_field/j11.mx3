@@ -9,7 +9,7 @@ x_displacement := 75e-9
 y_displacement := 525e-9
 z_displacement := 12*cz-thickness/2
 
-SetPBC(5, 0, 0)        // 5 extra images on left and right sides.
+// SetPBC(5, 0, 0)        // 5 extra images on left and right sides.
 SetGridsize(80,384,24)
 SetCellsize(c,c,cz)
 

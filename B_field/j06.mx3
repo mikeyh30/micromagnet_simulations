@@ -3,8 +3,8 @@
 c := 5e-9
 cz := 10e-9
 width := 100e-9
-height := 300e-9
-thickness := 50e-9
+height := 250e-9
+thickness := 100e-9
 x_displacement := 75e-9
 y_displacement := 525e-9
 z_displacement := 12*cz-thickness/2

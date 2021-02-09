@@ -14,7 +14,7 @@ SetGridsize(80,384,24)
 SetCellsize(c,c,cz)
 
 // Permalloy parameters
-Msat  = 800e3
+Msat  = 750e3
 Aex   = 13e-12
 alpha = 0.1
 EdgeSmooth = 8

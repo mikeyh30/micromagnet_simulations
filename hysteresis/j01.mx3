@@ -2,6 +2,7 @@
 // Cell size
 c := 5e-9
 cz := 10e-9
+
 width := 100e-9
 height := 300e-9
 thickness := 50e-9
@@ -35,9 +36,27 @@ m = randomMag() // uniform field in (x,y,z)
 relax()    // slower but robust for large changes
 save(m)    // relaxed state
 
-autosave(m, 200e-12) // saves space-dependent quantity m every 200e-12s
-tableautosave(10e-12) // save data table every 10e-12s
+// Hysteresis
 
-B_ext = vector(0, 0.3, 0) // Overwrite external magnetic
-run(1e-9) // run sim for 1e-9s
-saveas(B_demag, "strayfield")
+Bstep := 5e-3
+Bmax := 100e-3
+MinimizerStop = 1e-6
+TableAdd(B_ext)
+
+for B:=0.0; B<=Bmax; B+=Bstep{
+    B_ext = vector(B, 0, 0)
+    minimize()
+    tablesave()
+}
+
+for B:=Bmax; B>=-Bmax; B-=Bstep{
+    B_ext = vector(B, 0, 0)
+    minimize()
+    tablesave()
+}
+
+for B:=-Bmax; B<=Bmax; B+=Bstep{
+    B_ext = vector(B, 0, 0)
+    minimize()
+    tablesave()
+}
