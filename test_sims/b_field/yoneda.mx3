@@ -1,11 +1,8 @@
 // Cell size
-c := 100e-9
+c := 25e-9
 cz := 25e-9
-width := 18e-6
-height := 5e-6
-gap := 6.85e-6
 
-SetGridsize(256,256,4)
+SetGridsize(128,256,4)
 SetCellsize(c,c,cz)
 
 // Permalloy parameters
@@ -17,14 +14,18 @@ EdgeSmooth = 8
 // magnet definitions
 system := universe().sub(universe())
 
-rect1 := cuboid(width,height,4*cz)
+height := 2250e-9
+gap := 260e-9
+rect1 := cuboid(1000e-9, 2250e-9, 250e-9)
+rect2 := cuboid(360e-9, 890e-9, 250e-9)
 top := rect1.transl(0,(height+gap)/2,0)
 bottom := rect1.transl(0,-(height+gap)/2,0)
-system = system.add(top).add(bottom)
+left := rect2.transl(-(1000e-9+360e-9)/2,0,0)
+system = system.add(top).add(bottom).add(left)
 
 setgeom(system)
 snapshot(geom)
-saveas(geom,"h2.ovf")
+saveas(geom,"yoneda.ovf")
 
 m = randomMag() // uniform field in (x,y,z)
 relax()    // slower but robust for large changes
@@ -33,6 +34,6 @@ save(m)    // relaxed state
 autosave(m, 200e-12) // saves space-dependent quantity m every 200e-12s
 tableautosave(10e-12) // save data table every 10e-12s
 
-B_ext = vector(0.3, 0, 0) // Overwrite external magnetic
-run(1e-9) // run sim for 1e-9s
+B_ext = vector(1, 0, 0) // Overwrite external magnetic
+run(5e-9) // run sim for 1e-9s
 saveas(B_demag, "strayfield")
