@@ -10,7 +10,7 @@ parser.add_argument("a")
 args = parser.parse_args()
 
 # Magnetostatic field (mT)
-f = np.load("B_field/" + args.a + ".out/strayfield.npy") * 1000
+f = np.load("b_field/" + args.a + ".out/strayfield.npy") * 1000
 
 dim, zr, yr, xr = f.shape
 
