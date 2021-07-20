@@ -1,0 +1,39 @@
+// 80*384*24 * 7 time steps is a 12min simulation
+// Cell size
+c := 10e-9
+cz := 10e-9
+width := 100e-9
+height := 800e-9
+thickness := 100e-9
+
+SetGridsize(64,128,16)
+SetCellsize(c,c,cz)
+
+// Permalloy parameters
+Msat  = 800e3
+Aex   = 13e-12
+alpha = 0.1
+EdgeSmooth = 8
+
+// magnet definitions
+system := universe().sub(universe())
+
+rect1 := cuboid(width,height,thickness)
+mag1 := rect1.transl(-100e-9,0,0)
+mag2 := rect1.transl(100e-9,0,0)
+system = system.add(mag1).add(mag2)
+
+setgeom(system)
+snapshot(geom)
+saveas(geom,"geom.ovf")
+
+m = randomMag() // uniform field in (x,y,z)
+relax()    // slower but robust for large changes
+save(m)    // relaxed state
+
+autosave(m, 200e-12) // saves space-dependent quantity m every 200e-12s
+tableautosave(10e-12) // save data table every 10e-12s
+
+B_ext = vector(0, 0, 0) // Overwrite external magnetic
+run(1e-9) // run sim for 1e-9s
+saveas(B_demag, "strayfield")
