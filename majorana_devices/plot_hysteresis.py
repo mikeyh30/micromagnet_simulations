@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("sim")
+parser.add_argument("hyst_table")
 args = parser.parse_args()
 
-df = pd.read_csv('./hysteresis/' + args.sim + '.out/table.txt',delimiter='\t')
+df = pd.read_csv(args.hyst_table,delimiter='\t')
 
 plt.plot(df['B_extx (T)'],df['mx ()'])
 

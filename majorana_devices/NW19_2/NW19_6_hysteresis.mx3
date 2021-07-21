@@ -12,7 +12,7 @@ SetCellsize(c,c,cz)
 // Permalloy parameters
 Msat  = 800e3
 Aex   = 13e-12
-alpha = 0.1
+alpha = 0.05
 EdgeSmooth = 8
 
 // magnet definitions
@@ -35,7 +35,7 @@ save(m)    // relaxed state
 // Hysteresis
 
 Bstep := 5e-3
-Bmax := 200e-3
+Bmax := 750e-3
 MinimizerStop = 1e-6
 TableAdd(B_ext)
 
