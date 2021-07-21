@@ -20,7 +20,7 @@ system := universe().sub(universe())
 
 rect1 := cuboid(width,height,thickness)
 mag1 := rect1.transl(0,0,0)
-system = system.add(mag1).add(mag2)
+system = system.add(mag1)
 
 setgeom(system)
 snapshot(geom)
