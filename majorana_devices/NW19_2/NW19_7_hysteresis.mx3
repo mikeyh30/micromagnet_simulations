@@ -26,17 +26,18 @@ system = system.add(mag1).add(mag2).add(mag3)
 
 setgeom(system)
 snapshot(geom)
-saveas(geom,"geom.ovf")
+save(geom)
 
 m = randomMag() // uniform field in (x,y,z)
 relax()    // slower but robust for large changes
-save(m)    // relaxed state
+save(m)
+save(B_demag)  // relaxed state
 
 
 // Hysteresis
 
-Bstep := 1e-3
-Bmax := 750e-3
+Bstep := 500e-6
+Bmax := 250e-3
 MinimizerStop = 1e-6
 TableAdd(B_ext)
 
@@ -46,14 +47,41 @@ for B:=0.0; B<=Bmax; B+=Bstep{
     tablesave()
 }
 
-for B:=Bmax; B>=-Bmax; B-=Bstep{
+save(m)
+save(B_demag)
+
+for B:=Bmax; B>=0; B-=Bstep{
     B_ext = vector(0, B, 0)
     minimize()
     tablesave()
 }
 
-for B:=-Bmax; B<=Bmax; B+=Bstep{
+save(m)
+save(B_demag)
+
+for B:=0; B>=-Bmax; B-=Bstep{
     B_ext = vector(0, B, 0)
     minimize()
     tablesave()
 }
+
+save(m)
+save(B_demag)
+
+for B:=-Bmax; B<=0; B+=Bstep{
+    B_ext = vector(0, B, 0)
+    minimize()
+    tablesave()
+}
+
+save(m)
+save(B_demag)
+
+for B:=0; B<=Bmax; B+=Bstep{
+    B_ext = vector(0, B, 0)
+    minimize()
+    tablesave()
+}
+
+save(m)
+save(B_demag)

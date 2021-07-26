@@ -8,6 +8,6 @@ args = parser.parse_args()
 
 df = pd.read_csv(args.hyst_table,delimiter='\t')
 
-plt.plot(df['B_extx (T)'],df['mx ()'])
+plt.plot(df['B_exty (T)'],df['my ()'])
 
 plt.show()
