@@ -6,3 +6,4 @@ activate
 *.png
 *.GDS
 *.gds
+env/
