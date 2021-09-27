@@ -1,45 +1,67 @@
-// 80*384*24 * 7 time steps is a 12min simulation
+start := now()
+
 // Cell size
 c := 10e-9
 cz := 10e-9
-width := 100e-9
-height := 800e-9
-thickness := 100e-9
 
+// Grid size
+gx := 64
+gy := 128
+gz := 16
 
+// magnet dims
+mag_width := 100e-9
+mag_height := 800e-9
+mag_thickness := 65e-9
 
+// wire dims
 
-SetGridsize(64, 128, 16)
-SetCellsize(c,c,cz)
+wire_length := gx*c
+wire_diameter := 100e-9
+
+// Grid and cell init
+SetGridsize(gx, gy, gz)
+SetCellsize(c, c, cz)
+
+// Shapes
+magnets := universe().inverse()
+magnets = magnets.add(cuboid(mag_width,mag_height,mag_thickness).transl(-100e-9,0,0))
+magnets = magnets.add(cuboid(mag_width,mag_height,mag_thickness).transl(100e-9,0,0))
+wire := cylinder(wire_diameter,wire_length).transl(0,-(mag_height+mag_thickness)/2 - 100e-9,0).rotY(pi/2)
 
 // Regions
-DefRegion(1,cuboid(width,height,thickness).transl(-100e-9,0,0))
-DefRegion(2,cuboid(width,height,thickness).transl(100e-9,0,0))
-DefRegion(10, cuboid(64*c,100e-9,100e-9).transl(0,-1e-6,0))
+DefRegion(1, magnets)
+DefRegion(10,wire)
+
+
+// Permalloy parameters
+Msat.SetRegion(1, 800e3)
+Aex.SetRegion(1, 13e-12)
+alpha.SetRegion(1, 0.05)
+m.SetRegion(1,randomMag())  
+
+// Empty space parameters
+Msat.SetRegion(0, 0)
+Aex.SetRegion(0, 0)
+alpha.SetRegion(0, 0)
+m.SetRegion(0, uniform(0,0,0))
+
+// Wire parameters
+Msat.SetRegion(10, 0)
+Aex.SetRegion(10, 0)
+alpha.SetRegion(10, 0)
+m.SetRegion(10, uniform(0,0,0))
+
+EdgeSmooth = 8
 
 save(regions)
 
-// Permalloy parameters
-for reg:=1; reg<=2; reg+=1{
-    Msat.SetRegion(reg, 800e3)
-    Aex.SetRegion(reg, 13e-12)
-    alpha.SetRegion(reg, 0.05)
-}
-EdgeSmooth = 8
-
-Msat.SetRegion(0, 0)
-m.SetRegion(0, uniform(0,0,0))
-Aex.SetRegion(0, 0)
-
-Msat.SetRegion(10, 0)
-m.SetRegion(10, uniform(0,0,0))
-Aex.SetRegion(10, 0)
-
-m.SetRegion(1,randomMag())  // uniform field in (x,y,z)
-m.SetRegion(2,randomMag())
 relax()                     // slower but robust for large changes
 save(m_full)
 save(B_demag)               // relaxed state
+save(B_eff)
+save(B_eff.Region(10))
+save(m_full.Region(10))
 
 
 // Hysteresis
