@@ -68,12 +68,13 @@ save(m_full.Region(10))
 
 Bstep := 1.0e-3
 Bmax := 250.0e-3
+fpt_err := 1e-6
 MinimizerStop = 1e-6
 TableAdd(B_ext)
 TableAdd(m_full.Region(10))
 TableAdd(B_eff.Region(10))
 
-for B:=0.0; B<=Bmax; B+=Bstep{
+for B:=0.0; B<=Bmax+fpt_err; B+=Bstep{
     B_ext = vector(0, B, 0)
     minimize()
     tablesave()
@@ -82,7 +83,7 @@ for B:=0.0; B<=Bmax; B+=Bstep{
 save(m_full)
 save(B_demag)
 
-for B:=Bmax-Bstep; B>=0.0; B-=Bstep{
+for B:=Bmax-Bstep; B>=0.0-fpt_err; B-=Bstep{
     B_ext = vector(0, B, 0)
     minimize()
     tablesave()
@@ -91,7 +92,7 @@ for B:=Bmax-Bstep; B>=0.0; B-=Bstep{
 save(m_full)
 save(B_demag)
 
-for B:=-Bstep; B>=-Bmax; B-=Bstep{
+for B:=-Bstep; B>=-Bmax-fpt_err; B-=Bstep{
     B_ext = vector(0, B, 0)
     minimize()
     tablesave()
@@ -100,7 +101,7 @@ for B:=-Bstep; B>=-Bmax; B-=Bstep{
 save(m_full)
 save(B_demag)
 
-for B:=-Bmax+Bstep; B<=0.0; B+=Bstep{
+for B:=-Bmax+Bstep; B<=0.0+fpt_err; B+=Bstep{
     B_ext = vector(0, B, 0)
     minimize()
     tablesave()
@@ -109,7 +110,7 @@ for B:=-Bmax+Bstep; B<=0.0; B+=Bstep{
 save(m_full)
 save(B_demag)
 
-for B:=Bstep; B<=Bmax; B+=Bstep{
+for B:=Bstep; B<=Bmax+fpt_err; B+=Bstep{
     B_ext = vector(0, B, 0)
     minimize()
     tablesave()

@@ -10,7 +10,8 @@ parser.add_argument("a")
 args = parser.parse_args()
 
 # Magnetostatic field (mT)
-f = np.load("b_field/" + args.a + ".out/strayfield.npy") * 1000
+# f = np.load("b_field/" + args.a + ".out/strayfield.npy") * 1000
+f = np.load("b_field/" + args.a + ".npy") * 1000
 
 dim, zr, yr, xr = f.shape
 
@@ -43,7 +44,8 @@ cbar = fig.colorbar(im1, ax=axes1)
 im1.set_clim(0, 50);
 axes1.set_title("Magnetostatic field (mT)")
 axes1.set_aspect('equal')
-axes1.streamplot(y,x,u[:, :, CNT_height],v[:, :, CNT_height])
+partial = range(150,256)
+axes1.streamplot(y,x[partial],u[partial, :, CNT_height],v[partial, :, CNT_height])
 
 
 
@@ -54,14 +56,30 @@ cbar = fig.colorbar(im2, ax=axes2)
 axes2.set_title("Magnetostatic field gradient (mT/nm)")
 axes2.set_aspect('equal')
 
-electrode_position = 800 # distance from centre.
-rect1 = patches.Rectangle((0,(384*5)/2 - electrode_position-100),256*5,100,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2)
-rect2 = patches.Rectangle((0,(384*5)/2 + electrode_position),256*5,100,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2)
-rect3 = patches.Rectangle((0,(384*5)/2 - electrode_position-100),256*5,100,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2)
-rect4 = patches.Rectangle((0,(384*5)/2 + electrode_position),256*5,100,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2)
-rect5 = patches.Rectangle((0,(384*5)/2 - 250),256*5,500,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2)
-rect6 = patches.Rectangle((0,(384*5)/2 - 250),256*5,500,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+# electrode_position = 800 # distance from centre.
+# rect1 = patches.Rectangle((0,(384*5)/2 - electrode_position-100),256*5,100,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+# rect2 = patches.Rectangle((0,(384*5)/2 + electrode_position),256*5,100,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+# rect3 = patches.Rectangle((0,(384*5)/2 - electrode_position-100),256*5,100,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+# rect4 = patches.Rectangle((0,(384*5)/2 + electrode_position),256*5,100,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+# rect5 = patches.Rectangle((0,(384*5)/2 - 250),256*5,500,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+# rect6 = patches.Rectangle((0,(384*5)/2 - 250),256*5,500,linewidth=1,edgecolor='r',facecolor='r', fill=True, alpha=0.2)
 
+rect1 = patches.Rectangle((65*cx,150*cx),15*cx,(128-100)*cx, linewidth=1, edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+rect2 = patches.Rectangle((102.5*cx,150*cx),20*cx,(128-100)*cx, linewidth=1, edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+rect3 = patches.Rectangle((145*cx,150*cx),15*cx,(128-100)*cx, linewidth=1, edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+rect4 = patches.Rectangle((182.5*cx,150*cx),20*cx,(128-100)*cx, linewidth=1, edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+rect5 = patches.Rectangle((225*cx,150*cx),15*cx,(128-100)*cx, linewidth=1, edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+rect6 = patches.Rectangle((262.5*cx,150*cx),20*cx,(128-100)*cx, linewidth=1, edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+rect7 = patches.Rectangle((305*cx,150*cx),15*cx,(128-100)*cx, linewidth=1, edgecolor='r',facecolor='r', fill=True, alpha=0.2)
+
+
+axes1.add_patch(rect1)
+axes1.add_patch(rect2)
+axes1.add_patch(rect3)
+axes1.add_patch(rect4)
+axes1.add_patch(rect5)
+axes1.add_patch(rect6)
+axes1.add_patch(rect7)
 # axes1.add_patch(rect1)
 # axes1.add_patch(rect2)
 # axes1.add_patch(rect5)
