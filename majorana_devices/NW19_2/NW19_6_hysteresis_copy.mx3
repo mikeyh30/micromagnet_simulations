@@ -1,5 +1,6 @@
 start := now()
 
+// 80*384*24 * 7 time steps is a 12min simulation
 // Cell size
 c := 10e-9
 cz := 10e-9
@@ -118,3 +119,6 @@ for B:=Bstep; B<=Bmax+fpt_err; B+=Bstep{
 
 save(m_full)
 save(B_demag)
+
+Time_elapsed := since(start).Seconds()
+print("Running time of", Floor(Time_elapsed/60), "minutes and ", remainder(Time_elapsed, 60), "seconds" )
