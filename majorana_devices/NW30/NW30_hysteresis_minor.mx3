@@ -5,7 +5,7 @@ cz := 10e-9
 width1 := 100e-9
 width2 := 140e-9
 height := 800e-9
-thickness := 100e-9
+thickness := 60e-9
 pitch := 480e-9
 
 SetGridsize(512,128,16)
@@ -66,7 +66,7 @@ B_antiparallel := 35.0e-3
 MinimizerStop = 1e-6
 TableAdd(B_ext)
 TableAdd(B_eff.Region(10))
-
+TableAdd(B_demag.Region(10))
 B_ext = vector(0,-Bmax,0)
 
 relax()    // slower but robust for large changes
@@ -77,26 +77,22 @@ for B:=-Bmax; B<=B_antiparallel; B+=Bstep{
    B_ext = vector(0, B, 0)
    minimize()   // small changes best minimized by minimize()
    tablesave()
-   save(m)
 }
 
 for B:=B_antiparallel; B>=-Bmax; B-=Bstep{
    B_ext = vector(0, B, 0)
    minimize()   // small changes best minimized by minimize()
    tablesave()
-   save(m)
 }
 
 for B:=-Bmax; B<=B_antiparallel; B+=Bstep{
    B_ext = vector(0, B, 0)
    minimize()   // small changes best minimized by minimize()
    tablesave()
-   save(m)
 }
 
 for B:=B_antiparallel; B>=-Bmax; B-=Bstep{
    B_ext = vector(0, B, 0)
    minimize()   // small changes best minimized by minimize()
    tablesave()
-   save(m)
 }
