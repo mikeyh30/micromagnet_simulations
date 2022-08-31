@@ -12,20 +12,20 @@ SetGridsize(512,128,16)
 SetCellsize(c,c,cz)
 
 // magnet definitions
-system := universe().sub(universe())
-magnets := universe().inverse()
+magnets1 := universe().inverse()
+magnets2 := universe().inverse()
 
 rect1 := cuboid(width1,height,thickness)
 rect2 := cuboid(width2,height,thickness)
 
 for i:=0; i<10; i++{
     mag := rect1.transl(i*pitch - 4.5*pitch,0,0)
-    magnets = magnets.add(mag)
+    magnets1 = magnets1.add(mag)
 }
 
 for i:=0; i<9; i++{
     mag := rect2.transl(i*pitch - 4*pitch,0,0)
-    magnets = magnets.add(mag)
+    magnets2 = magnets2.add(mag)
 }
 
 // dot1 definitions
@@ -34,7 +34,8 @@ dot1 = dot1.transl(3.5*pitch,-460e-9,0)
 
 
 // Regions
-DefRegion(1, magnets)
+DefRegion(1, magnets1)
+DefRegion(2, magnets2)
 DefRegion(10,dot1)
 
 
@@ -42,7 +43,13 @@ DefRegion(10,dot1)
 Msat.SetRegion(1, 800e3)
 Aex.SetRegion(1, 13e-12)
 alpha.SetRegion(1, 0.05)
-m.SetRegion(1,randomMag())  
+m.SetRegion(1,uniform(0, -1, 0)) 
+
+// Permalloy parameters
+Msat.SetRegion(2, 800e3)
+Aex.SetRegion(2, 13e-12)
+alpha.SetRegion(2, 0.05)
+m.SetRegion(2,uniform(0, -1, 0))  
 
 // Empty space parameters
 Msat.SetRegion(0, 0)
@@ -57,21 +64,15 @@ alpha.SetRegion(10, 0)
 m.SetRegion(10, uniform(0,0,0))
 
 save(regions)
-
-// Initialize
-
-Bmax := 100.0e-3
-MinimizerStop = 1.0e-6
-B_ext = vector(0,-Bmax,0)
-
 relax()    // slower but robust for large changes
-save(m)
-save(B_demag)  // relaxed state
+save(m)    // relaxed state
 
-for B:=-Bmax; B<=0.0; B+=Bstep{
-   B_ext = vector(0.0, B, 0.0)
-   minimize()   // small changes best minimized by minimize()
-}
+autosave(m, 200e-12) // saves space-dependent quantity m every 200e-12s
+tableautosave(10e-12) // save data table every 10e-12s
 
-save(m)
-save(B_demag)  // relaxed state
+B_ext = vector(0, 0, 0) // Overwrite external magnetic
+run(1e-9) // run sim for 1e-9s
+saveas(B_demag, "strayfield1")
+
+run(10e-9) // run sim for 1e-9s
+saveas(B_demag, "strayfield2")
